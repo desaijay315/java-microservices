@@ -1,0 +1,63 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+
+### IntelliJ IDEA ###
+#.idea
+#*.iws
+#*.iml
+#*.ipr
+out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Mac-OS
+.DS_Store
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+
+### H2 ###
+*.db
+
+
+# Compiled class file
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# IDE project files #
+.idea/
+*.iml
+*.iws
+*.ipr
+*.classPath
+*.settings/
+*.metadata/
+nbproject/
+build/
+dist/
+target/
+bin/
+out/
+logs/
