@@ -3,12 +3,17 @@ package com.example.productservice.controller;
 import com.example.productservice.entity.Product;
 import com.example.productservice.model.ProductRequest;
 import com.example.productservice.service.ProductService;
+import com.example.productservice.service.exception.InvalidProductException;
+import com.example.productservice.service.exception.ProductNotFoundException;
+import com.example.productservice.service.exception.QuantityNotAvailableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -29,7 +34,7 @@ public class ProductController {
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId) {
         Optional<Product> product = productService.getProductById(productId);
         return product.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + productId));
     }
 
     @GetMapping
@@ -58,4 +63,33 @@ public class ProductController {
         List<Product> products = productService.getProductsByPriceRange(minPrice, maxPrice);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
+    @ExceptionHandler(value = {ProductNotFoundException.class})
+    public ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("status", "NOT_FOUND");
+        errorResponse.put("statusCode", "404");
+        errorResponse.put("message", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {InvalidProductException.class})
+    public ResponseEntity<Object> handleInvalidProductException(InvalidProductException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", HttpStatus.BAD_REQUEST);
+        errorResponse.put("statusCode", 400);
+        errorResponse.put("message", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {QuantityNotAvailableException.class})
+    public ResponseEntity<Object> handleQuantityNotAvailableException(QuantityNotAvailableException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", HttpStatus.BAD_REQUEST);
+        errorResponse.put("statusCode", 400);
+        errorResponse.put("message", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
+
