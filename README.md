@@ -181,3 +181,80 @@ Deletes the product with the given ID.
   "quantity": 100
 }
 ```
+
+
+### POST /orders/placeOrder
+
+**Request Body:**
+
+The request body should be a JSON object that includes the `productId` and `quantity` fields. For example:
+
+```json
+{
+  "productId": 123,
+  "quantity": 10
+}
+```
+
+**Response Body:**
+
+If the order is placed successfully, the response body will be a JSON object representing the created order, which includes the `id`, `productId`, `quantity`, `orderDate`, `orderStatus`, and `amount` fields. For example:
+
+```json
+{
+  "id": 1,
+  "productId": 123,
+  "quantity": 10,
+  "orderDate": "2022-05-01T10:10:10Z",
+  "orderStatus": "PROCESSING",
+  "amount": 100
+}
+```
+
+### GET /orders/{orderId}
+
+**Response Body:**
+
+If the order is found, the response body will be a JSON object representing the order, which includes the `id`, `productId`, `quantity`, `orderDate`, `orderStatus`, and `amount` fields. For example:
+
+```json
+{
+  "id": 1,
+  "productId": 123,
+  "quantity": 10,
+  "orderDate": "2022-05-01T10:10:10Z",
+  "orderStatus": "PROCESSING",
+  "amount": 100
+}
+```
+
+If the order is not found, the response body will be empty.
+
+### GET /orders
+
+**Response Body:**
+
+If there are orders available, the response body will be a JSON array of objects, each representing an order. Each object includes the `id`, `productId`, `quantity`, `orderDate`, `orderStatus`, and `amount` fields. For example:
+
+```json
+[
+  {
+    "id": 1,
+    "productId": 123,
+    "quantity": 10,
+    "orderDate": "2022-05-01T10:10:10Z",
+    "orderStatus": "PROCESSING",
+    "amount": 100
+  },
+  {
+    "id": 2,
+    "productId": 456,
+    "quantity": 5,
+    "orderDate": "2022-05-02T10:10:10Z",
+    "orderStatus": "COMPLETED",
+    "amount": 50
+  }
+]
+```
+
+If there are no orders available, the response body will be an empty array.

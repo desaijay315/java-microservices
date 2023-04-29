@@ -25,7 +25,6 @@ public class OrderServiceImpl implements OrderService {
         // Fetch the product details from ProductService using the Feign client
         productService.reduceQuantity(orderRequest.getProductId(), orderRequest.getQuantity());
 
-
         // Create a new Order object
         Order order = orderRequest.toOrder();
 

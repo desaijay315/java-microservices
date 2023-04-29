@@ -1,6 +1,7 @@
 package com.example.orderservice.controller;
 
 import com.example.orderservice.entity.Order;
+import com.example.orderservice.model.OrderRequest;
 import com.example.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping
-    public ResponseEntity<Order> placeOrder(@RequestParam("productId") Long productId,
-                                            @RequestParam("quantity") Long quantity) {
-        Order order = orderService.placeOrder(productId, quantity);
+    @PostMapping("/placeOrder")
+    public ResponseEntity<Order> placeOrder(@RequestBody OrderRequest orderRequest) {
+        Order order = orderService.placeOrder(orderRequest);
         return ResponseEntity.ok(order);
     }
 
