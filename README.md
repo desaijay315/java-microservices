@@ -1,3 +1,36 @@
+## Dependencies
+
+The following are the dependencies defined in the `pom.xml` file for the Order Service API:
+
+### Spring Boot Starter Dependencies
+
+- `spring-boot-starter-actuator`: Provides production-ready features to help you monitor and manage your application.
+- `spring-boot-starter-data-jpa`: Provides Spring Data JPA and Hibernate support.
+- `spring-boot-starter-web`: Provides Spring MVC and embedded Tomcat server.
+
+### Tracing and Logging Dependencies
+
+- `micrometer-tracing-bridge-brave`: Provides a Micrometer tracing bridge for the Brave tracing system.
+- `zipkin-reporter-brave`: Provides a Zipkin reporter for Brave tracing system.
+
+### Spring Cloud Dependencies
+
+- `spring-cloud-starter-netflix-eureka-client`: Provides integration with Netflix Eureka service discovery.
+
+### Database and Testing Dependencies
+
+- `mysql-connector-j`: Provides the MySQL JDBC driver to communicate with MySQL databases.
+- `spring-boot-starter-test`: Provides testing support for Spring Boot applications.
+
+### Other Dependencies
+
+- `lombok`: Provides annotation-based shortcuts for common Java code patterns.
+- `spring-cloud-starter-config`: Provides Spring Cloud Config support to externalize configuration properties.
+- `spring-boot-devtools`: Provides additional development-time features to improve developer productivity.
+- `spring-cloud-starter-openfeign`: Provides integration with the OpenFeign client to simplify RESTful service calls.
+- `spring-cloud-starter-circuitbreaker-resilience4j`: Provides integration with Resilience4j, a lightweight fault tolerance library.
+
+
 ### Lombok is a Java library that helps to reduce boilerplate code by generating getters, setters, constructors, and other utility methods using annotations. Here is a list of some common Lombok annotations along with their brief descriptions:
 
 1. `@Getter`: Generates a getter method for the annotated field.
