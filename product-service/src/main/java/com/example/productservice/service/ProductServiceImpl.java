@@ -1,6 +1,7 @@
 package com.example.productservice.service;
 
 import com.example.productservice.entity.Product;
+import com.example.productservice.model.ProductRequest;
 import com.example.productservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Product product) {
-        return productRepository.save(product);
+    public Optional<Product> updateProduct(Long productId, ProductRequest productRequest) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            product.setProductName(productRequest.getProductName());
+            product.setPrice(productRequest.getPrice());
+            product.setQuantity(productRequest.getQuantity());
+            Product updatedProduct = productRepository.save(product);
+            return Optional.of(updatedProduct);
+        } else {
+            return Optional.empty();
+        }
     }
+
+
 
     @Override
     public void deleteProduct(Long id) {

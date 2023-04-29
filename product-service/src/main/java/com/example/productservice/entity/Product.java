@@ -15,14 +15,14 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long productId;
+    private Long productId;
 
     @Column(name = "PRODUCT_NAME")
     private String productName;
 
     @Column(name = "PRICE")
-    private long price;
+    private Long price;
 
     @Column(name = "QUANTITY")
-    private long quantity;
+    private Long quantity;
 }

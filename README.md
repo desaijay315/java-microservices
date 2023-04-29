@@ -58,3 +58,126 @@ The `ProductController` class includes the following API endpoints, which cover 
 - **Get products within a specified price range (HTTP GET)**\
   Endpoint: `/product/price-range?min={min}&max={max}`\
   Method: `getProductsByPriceRange`
+  
+  
+## API Endpoints
+
+### Create a Product
+
+`POST /product/create-product`
+
+Creates a new product with the given details.
+
+#### Request Body
+
+```json
+{
+  "productName": "Sample Product",
+  "price": 10,
+  "quantity": 100
+}
+```
+
+#### Response
+
+```json
+{
+  "productId": 1,
+  "productName": "Sample Product",
+  "price": 10,
+  "quantity": 100
+}
+```
+
+### Get All Products
+
+`GET /product`
+
+Returns a list of all available products.
+
+#### Response
+
+```json
+[
+  {
+    "productId": 1,
+    "productName": "Product 1",
+    "price": 10,
+    "quantity": 100
+  },
+  {
+    "productId": 2,
+    "productName": "Product 2",
+    "price": 20,
+    "quantity": 50
+  },
+  {
+    "productId": 3,
+    "productName": "Product 3",
+    "price": 30,
+    "quantity": 25
+  },
+  ...
+]
+```
+
+### Get a Product by ID
+
+`GET /product/{id}`
+
+Returns the product with the given ID.
+
+#### Response
+
+```json
+{
+  "productId": 1,
+  "productName": "Product 1",
+  "price": 10,
+  "quantity": 100
+}
+```
+
+### Update a Product
+
+`PUT /product/{id}`
+
+Updates the product with the given ID.
+
+#### Request Body
+
+```json
+{
+  "productName": "Updated Product",
+  "price": 15,
+  "quantity": 75
+}
+```
+
+#### Response
+
+```json
+{
+  "productId": 1,
+  "productName": "Updated Product",
+  "price": 15,
+  "quantity": 75
+}
+```
+
+### Delete a Product
+
+`DELETE /product/{id}`
+
+Deletes the product with the given ID.
+
+#### Response
+
+```json
+{
+  "productId": 1,
+  "productName": "Product 1",
+  "price": 10,
+  "quantity": 100
+}
+```

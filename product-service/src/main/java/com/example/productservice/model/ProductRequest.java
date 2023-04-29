@@ -1,16 +1,25 @@
 package com.example.productservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.productservice.entity.Product;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ProductRequest {
+    @NonNull
     private String productName;
-    private long price;
-    private long quantity;
+    @NonNull
+    private Long price;
+    @NonNull
+    private Long quantity;
+
+    public Product toProduct() {
+        return Product.builder()
+                .productName(this.productName)
+                .price(this.price)
+                .quantity(this.quantity)
+                .build();
+    }
 }
