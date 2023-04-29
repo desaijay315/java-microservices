@@ -1,4 +1,4 @@
-Lombok is a Java library that helps to reduce boilerplate code by generating getters, setters, constructors, and other utility methods using annotations. Here is a list of some common Lombok annotations along with their brief descriptions:
+###Lombok is a Java library that helps to reduce boilerplate code by generating getters, setters, constructors, and other utility methods using annotations. Here is a list of some common Lombok annotations along with their brief descriptions:
 
 1. `@Getter`: Generates a getter method for the annotated field.
 2. `@Setter`: Generates a setter method for the annotated field.
@@ -18,3 +18,43 @@ Lombok is a Java library that helps to reduce boilerplate code by generating get
 16. `@With`: Generates "with" methods for the annotated field. A "with" method is like a setter, but it returns a new instance of the class with the new field value, rather than modifying the current instance.
 
 You can find more information and examples of these annotations in the Lombok documentation: [https://projectlombok.org/features/all](https://projectlombok.org/features/all)
+
+
+###Creating a separate ProductRequest model is useful for several reasons:
+
+1. Separation of concerns: It allows you to separate the incoming request data representation from the actual entity representation in your application. This way, you can make changes to the request model without affecting the underlying entity directly.
+
+2. Validation: By creating a separate request model, you can apply validation rules specific to incoming requests. For example, you may want to ensure that certain fields are provided in the request or meet specific criteria. Using a separate request model makes it easier to apply and maintain these validation rules.
+
+3. Data mapping: Sometimes, the incoming request data may not match the structure of the entity you're working with. In these cases, using a separate request model makes it easier to map the incoming data to the entity properties.
+
+4. Flexibility: Having a separate request model allows you to evolve your API without impacting the underlying entity. For example, you might want to add additional fields to your request model that are not part of the entity, such as metadata or user-specific information.
+
+
+###ProductController API Endpoints
+
+The `ProductController` class includes the following API endpoints, which cover all the business logic implemented in the `ProductServiceImpl` class:
+
+- **Create a new product (HTTP POST)**\
+  Endpoint: `/product`\
+  Method: `createProduct`
+
+- **Get a single product by its ID (HTTP GET)**\
+  Endpoint: `/product/{id}`\
+  Method: `getProductById`
+
+- **Get all products (HTTP GET)**\
+  Endpoint: `/product`\
+  Method: `getAllProducts`
+
+- **Update a product by its ID (HTTP PUT)**\
+  Endpoint: `/product/{id}`\
+  Method: `updateProduct`
+
+- **Delete a product by its ID (HTTP DELETE)**\
+  Endpoint: `/product/{id}`\
+  Method: `deleteProduct`
+
+- **Get products within a specified price range (HTTP GET)**\
+  Endpoint: `/product/price-range?min={min}&max={max}`\
+  Method: `getProductsByPriceRange`
