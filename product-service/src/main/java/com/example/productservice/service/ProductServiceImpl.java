@@ -3,6 +3,7 @@ package com.example.productservice.service;
 import com.example.productservice.entity.Product;
 import com.example.productservice.model.ProductRequest;
 import com.example.productservice.repository.ProductRepository;
+import com.example.productservice.service.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product not found with id " + id);
+        }
         productRepository.deleteById(id);
     }
 

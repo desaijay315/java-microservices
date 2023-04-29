@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,7 @@ public class ProductController {
                                                  @RequestBody ProductRequest productRequest) {
         Optional<Product> updatedProduct = productService.updateProduct(productId, productRequest);
         return updatedProduct.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + productId));
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +57,7 @@ public class ProductController {
         productService.deleteProduct(productId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @GetMapping("/price-range")
     public ResponseEntity<List<Product>> getProductsByPriceRange(@RequestParam("min") Long minPrice,

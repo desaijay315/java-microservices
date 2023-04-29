@@ -1,4 +1,4 @@
-package com.example.productservice.service.exception;
+package com.example.productservice.model;
 
 import org.springframework.http.HttpStatus;
 

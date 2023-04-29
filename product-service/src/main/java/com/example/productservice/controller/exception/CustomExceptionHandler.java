@@ -1,5 +1,6 @@
 package com.example.productservice.controller.exception;
 
+import com.example.productservice.model.ExceptionResponse;
 import com.example.productservice.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
