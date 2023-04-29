@@ -4,6 +4,7 @@ import com.example.productservice.entity.Product;
 import com.example.productservice.model.ProductRequest;
 import com.example.productservice.repository.ProductRepository;
 import com.example.productservice.service.exception.ProductNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Log4j2
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -60,5 +62,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getProductsByPriceRange(Long minPrice, Long maxPrice) {
         return productRepository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+    @Override
+    public void reduceQuantity(long productId, long quantity) {
+        log.info("Reduce Quantity {} for Id: {}", quantity,productId);
+
+        Product product
+                = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + productId));
+
+        if(product.getQuantity() < quantity) {
+            throw new ProductNotFoundException("Product does not have sufficient Quantity");
+        }
+
+        product.setQuantity(product.getQuantity() - quantity);
+        productRepository.save(product);
+        log.info("Product Quantity updated Successfully");
     }
 }
