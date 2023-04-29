@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void reduceQuantity(long productId, long quantity) {
+    public void reduceQuantity(Long productId, Long quantity) {
         log.info("Reduce Quantity {} for Id: {}", quantity,productId);
 
         Product product

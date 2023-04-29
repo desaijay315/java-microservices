@@ -13,5 +13,5 @@ public interface ProductService {
     Optional<Product> updateProduct(Long productId, ProductRequest productRequest);
     void deleteProduct(Long id);
     List<Product> getProductsByPriceRange(Long minPrice, Long maxPrice);
-    void reduceQuantity(long productId, long quantity);
+    void reduceQuantity(Long productId, Long quantity);
 }

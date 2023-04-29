@@ -65,6 +65,15 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    @PutMapping("/reduceQuantity/{id}")
+    public ResponseEntity<Void> reduceQuantity(
+            @PathVariable("id") Long productId,
+            @RequestParam Long quantity
+    ) {
+        productService.reduceQuantity(productId,quantity);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @ExceptionHandler(value = {ProductNotFoundException.class})
     public ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex) {
         Map<String, String> errorResponse = new HashMap<>();
