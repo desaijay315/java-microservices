@@ -2,8 +2,10 @@ package com.example.productservice.controller;
 
 import com.example.productservice.entity.Product;
 import com.example.productservice.model.ProductRequest;
+import com.example.productservice.repository.ProductRepository;
 import com.example.productservice.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +29,6 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -60,10 +61,15 @@ public class ProductControllerTest {
 
     private ProductRequest productRequest;
 
+    @Before
+    void setup1(){
+        productService.deleteAll();
+    }
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
         productRequest = new ProductRequest("Product Test", 100L, 50L);
+        ResponseEntity<Product> response = restTemplate.postForEntity(BASE_URL + port + CREATE_PRODUCT_URL, productRequest, Product.class);
     }
 
     @Test
@@ -71,22 +77,21 @@ public class ProductControllerTest {
         // Given
         Product product = new Product(1L, "Product Test", 100L, 50L);
         // When
-        ResponseEntity<Product> response = restTemplate.postForEntity(BASE_URL + port + CREATE_PRODUCT_URL, productRequest, Product.class);
 
-// Then
-        Product createdProduct = response.getBody();
-        assertNotNull(createdProduct.getProductId());
-        assertEquals(productRequest.getProductName(), createdProduct.getProductName());
-        assertEquals(productRequest.getPrice(), createdProduct.getPrice());
-        assertEquals(productRequest.getQuantity(), createdProduct.getQuantity());
+        // Then
+//        Product createdProduct = product.getBody();
+        assertNotNull(product.getProductId());
+        assertEquals(productRequest.getProductName(), product.getProductName());
+        assertEquals(productRequest.getPrice(), product.getPrice());
+        assertEquals(productRequest.getQuantity(), product.getQuantity());
 
     }
 
     @Test
     void getProductById_ReturnsProduct() throws Exception {
         // Given
-        Long productId = 1L;
-        Product product = new Product(productId, "Test Product", 100L, 10L);
+        Long productId = 2L;
+        Product product = new Product(productId, "Product Test", 100L, 50L);
 
         // Mocking the ProductService to return the product when retrieving by ID
         when(productService.getProductById(productId)).thenReturn(Optional.of(product));
@@ -96,9 +101,9 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.productId").value(productId))
-                .andExpect(jsonPath("$.productName").value("Test Product"))
+                .andExpect(jsonPath("$.productName").value("Product Test"))
                 .andExpect(jsonPath("$.price").value(100))
-                .andExpect(jsonPath("$.quantity").value(10))
+                .andExpect(jsonPath("$.quantity").value(50))
                 .andReturn();
 
         // Then
@@ -106,7 +111,31 @@ public class ProductControllerTest {
         assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
     }
 
+    @Test
+    void getAllProducts_ReturnsAllProducts() throws Exception {
+        // Given
+        productService.deleteAll();
+
+        Product product1 = new Product(1L, "Product Test", 100L, 50L);
+        Product product2 = new Product(2L, "Product Test", 100L, 50L);
+        List<Product> products = Arrays.asList(product1, product2);
 
 
+        // Mocking the ProductService to return the products when requested
+        when(productService.getAllProducts())
+                .thenReturn(products);
 
+        // When
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(GET_ALL_PRODUCTS_URL)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].productName").value(product1.getProductName()))
+                .andReturn();
+
+        // Then
+        String expectedResponseBody = new ObjectMapper().writeValueAsString(products);
+        assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
+    }
 }

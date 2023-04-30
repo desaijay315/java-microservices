@@ -4,6 +4,8 @@ import com.example.productservice.entity.Product;
 import com.example.productservice.model.ProductRequest;
 import com.example.productservice.repository.ProductRepository;
 import com.example.productservice.service.exception.ProductNotFoundException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Product saveProduct(Product product) {
@@ -79,5 +84,10 @@ public class ProductServiceImpl implements ProductService {
         product.setQuantity(product.getQuantity() - quantity);
         productRepository.save(product);
         log.info("Product Quantity updated Successfully");
+    }
+
+    @Override
+    public void deleteAll(){
+        entityManager.createNativeQuery("TRUNCATE TABLE product").executeUpdate();
     }
 }

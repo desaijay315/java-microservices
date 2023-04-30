@@ -17,8 +17,8 @@ import java.time.Instant;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @Column(name = "PRODUCT_ID")
     private Long productId;
