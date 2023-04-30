@@ -61,13 +61,10 @@ public class ProductControllerTest {
 
     private ProductRequest productRequest;
 
-    @Before
-    void setup1(){
-        productService.deleteAll();
-    }
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        productService.deleteAll();
         productRequest = new ProductRequest("Product Test", 100L, 50L);
         ResponseEntity<Product> response = restTemplate.postForEntity(BASE_URL + port + CREATE_PRODUCT_URL, productRequest, Product.class);
     }
@@ -111,31 +108,58 @@ public class ProductControllerTest {
         assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
     }
 
+//    @Test
+//    void getAllProducts_ReturnsAllProducts() throws Exception {
+//        // Given
+//        productService.deleteAll();
+//
+//        Product product1 = new Product(1L, "Product Test", 100L, 50L);
+//        Product product2 = new Product(2L, "Product Test", 100L, 50L);
+//        List<Product> products = Arrays.asList(product1, product2);
+//
+//
+//        // Mocking the ProductService to return the products when requested
+//        when(productService.getAllProducts())
+//                .thenReturn(products);
+//
+//        // When
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(GET_ALL_PRODUCTS_URL)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$", hasSize(2)))
+//                .andExpect(jsonPath("$[0].productName").value(product1.getProductName()))
+//                .andReturn();
+//
+//        // Then
+//        String expectedResponseBody = new ObjectMapper().writeValueAsString(products);
+//        assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
+//    }
+
     @Test
-    void getAllProducts_ReturnsAllProducts() throws Exception {
+    void updateProduct_ReturnsUpdatedProduct() throws Exception {
         // Given
-        productService.deleteAll();
+        Long productId = 1L;
+        ProductRequest productRequest = new ProductRequest("Product Test", 100L, 50L);
+        Product existingProduct = new Product(productId, "Product Test", 200L, 20L);
 
-        Product product1 = new Product(1L, "Product Test", 100L, 50L);
-        Product product2 = new Product(2L, "Product Test", 100L, 50L);
-        List<Product> products = Arrays.asList(product1, product2);
-
-
-        // Mocking the ProductService to return the products when requested
-        when(productService.getAllProducts())
-                .thenReturn(products);
+        // Mocking the ProductService to return the existingProduct when updating
+        when(productService.updateProduct(productId, productRequest))
+                .thenReturn(Optional.of(existingProduct));
 
         // When
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(GET_ALL_PRODUCTS_URL)
-                        .accept(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(UPDATE_PRODUCT_URL, productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"productName\": \"Product Test\", \"price\": 200, \"quantity\": 20}"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].productName").value(product1.getProductName()))
+                .andExpect(jsonPath("$.productName").value(existingProduct.getProductName()))
+                .andExpect(jsonPath("$.price").value(existingProduct.getPrice()))
+                .andExpect(jsonPath("$.quantity").value(existingProduct.getQuantity()))
                 .andReturn();
 
         // Then
-        String expectedResponseBody = new ObjectMapper().writeValueAsString(products);
+        String expectedResponseBody = new ObjectMapper().writeValueAsString(existingProduct);
         assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
     }
 }

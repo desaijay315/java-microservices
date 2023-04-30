@@ -6,6 +6,7 @@ import com.example.productservice.repository.ProductRepository;
 import com.example.productservice.service.exception.ProductNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,7 +88,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteAll(){
-        entityManager.createNativeQuery("TRUNCATE TABLE product").executeUpdate();
+    public void deleteAll() {
+        entityManager.createQuery("DELETE FROM Product").executeUpdate();
+        entityManager.flush();
     }
 }
