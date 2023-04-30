@@ -6,9 +6,11 @@ import com.example.productservice.service.ProductService;
 import com.example.productservice.service.exception.InvalidProductException;
 import com.example.productservice.service.exception.ProductNotFoundException;
 import com.example.productservice.service.exception.QuantityNotAvailableException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,13 +20,15 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
+@Validated
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
     @PostMapping("/create-product")
-    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
+    @Validated
+    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest) {
         Product product = productRequest.toProduct();
         Product savedProduct = productService.saveProduct(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);

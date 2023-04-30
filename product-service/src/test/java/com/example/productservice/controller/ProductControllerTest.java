@@ -4,11 +4,14 @@ import com.example.productservice.entity.Product;
 import com.example.productservice.model.ProductRequest;
 import com.example.productservice.repository.ProductRepository;
 import com.example.productservice.service.ProductService;
+import com.example.productservice.service.exception.InvalidProductException;
+import com.example.productservice.service.exception.ProductNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/*
+we have created an instance of the ProductController class and annotated it with '@InjectMocks'. When the test runs, Mockito will inject the mock ProductService instance into the ProductController instance.
+ */
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -43,6 +50,10 @@ public class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    // Use @InjectMocks to inject the mocked productService into the ProductController instance
+    @InjectMocks
+    ProductController productController = new ProductController();
 
     @Mock
     private ProductService productService;
@@ -162,4 +173,18 @@ public class ProductControllerTest {
         String expectedResponseBody = new ObjectMapper().writeValueAsString(existingProduct);
         assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
     }
+
+    @Test
+    void getProductById_ThrowsException_WhenProductNotFound() {
+        // Arrange
+        Long productId = 1L;
+        when(productService.getProductById(productId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ProductNotFoundException.class, () -> {
+            productController.getProductById(productId);
+        });
+        verify(productService, times(1)).getProductById(productId);
+    }
+
 }
