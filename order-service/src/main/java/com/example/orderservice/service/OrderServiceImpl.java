@@ -1,9 +1,13 @@
 package com.example.orderservice.service;
 
 import com.example.orderservice.entity.Order;
+import com.example.orderservice.exception.CustomException;
 import com.example.orderservice.external.client.ProductService;
 import com.example.orderservice.model.OrderRequest;
+import com.example.orderservice.model.OrderResponse;
 import com.example.orderservice.repository.OrderRepository;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +15,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -21,22 +26,27 @@ public class OrderServiceImpl implements OrderService {
     private ProductService productService;
 
     @Override
-    public Order placeOrder(OrderRequest orderRequest) {
+    public long placeOrder(OrderRequest orderRequest) {
         // Fetch the product details from ProductService using the Feign client
+        log.info("Placing Order Request: {}", orderRequest);
+
         productService.reduceQuantity(orderRequest.getProductId(), orderRequest.getQuantity());
 
         // Create a new Order object
-        Order order = orderRequest.toOrder();
+        log.info("Creating Order with Status CREATED");
+        Order order = Order.builder()
+                .amount(orderRequest.getTotalAmount())
+                .orderStatus("CREATED")
+                .productId(orderRequest.getProductId())
+                .orderDate(Instant.now())
+                .quantity(orderRequest.getQuantity())
+                .build();
+
+        order = orderRepository.save(order);
 
         // Save the order to the repository
-        return orderRepository.save(order);
-    }
-
-    @Override
-    public Order getOrderDetails(Long orderId) {
-        // Fetch the order details from the repository using the provided orderId
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+        log.info("Order placed successfully with Order Id: {}", order.getId());
+        return order.getId();
     }
 
     @Override
