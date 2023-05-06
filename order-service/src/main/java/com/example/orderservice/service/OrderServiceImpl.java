@@ -2,7 +2,9 @@ package com.example.orderservice.service;
 
 import com.example.orderservice.entity.Order;
 import com.example.orderservice.exception.CustomException;
+import com.example.orderservice.external.client.PaymentService;
 import com.example.orderservice.external.client.ProductService;
+import com.example.orderservice.external.request.PaymentRequest;
 import com.example.orderservice.model.OrderRequest;
 import com.example.orderservice.model.OrderResponse;
 import com.example.orderservice.repository.OrderRepository;
@@ -25,6 +27,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private PaymentService paymentService;
+
     @Override
     public long placeOrder(OrderRequest orderRequest) {
         // Fetch the product details from ProductService using the Feign client
@@ -43,6 +48,27 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         order = orderRepository.save(order);
+
+        log.info("Calling Payment Service to complete the payment");
+        PaymentRequest paymentRequest
+                = PaymentRequest.builder()
+                .orderId(order.getId())
+                .paymentMode(orderRequest.getPaymentMode())
+                .amount(orderRequest.getTotalAmount())
+                .build();
+
+        String orderStatus = null;
+        try {
+            paymentService.doPayment(paymentRequest);
+            log.info("Payment done Successfully. Changing the Oder status to PLACED");
+            orderStatus = "PLACED";
+        } catch (Exception e) {
+            log.error("Error occurred in payment. Changing order status to PAYMENT_FAILED");
+            orderStatus = "PAYMENT_FAILED";
+        }
+
+        order.setOrderStatus(orderStatus);
+        orderRepository.save(order);
 
         // Save the order to the repository
         log.info("Order placed successfully with Order Id: {}", order.getId());
