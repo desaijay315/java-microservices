@@ -20,7 +20,6 @@ public class ApiGatewayApplication {
 		SpringApplication.run(ApiGatewayApplication.class, args);
 	}
 
-
 	@Bean
 	KeyResolver userKeySolver() {
 		return exchange -> Mono.just("userKey");
