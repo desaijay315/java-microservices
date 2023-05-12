@@ -421,7 +421,6 @@ To use this controller:
 
 1. Make a GET request to `/authenticate/login`.
 2. The controller will retrieve the authenticated user's information, including the email, access token, refresh token, expiration time, and authorities.
-3. The response will contain
 
 ## Contributing
 
