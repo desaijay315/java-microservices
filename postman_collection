@@ -8,11 +8,21 @@
 		{
 			"name": "Create product",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"productName\": \"iphone 14 pro max\",\r\n    \"price\": 20,\r\n    \"quantity\": 100\r\n}\r\n",
+					"raw": "{\r\n    \"productName\": \"cccccc\",\r\n    \"price\": 20,\r\n    \"quantity\": 100\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,12 +30,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/product/create-product",
-					"protocol": "http",
+					"raw": "{{host}}/product/create-product",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8080",
 					"path": [
 						"product",
 						"create-product"
@@ -37,18 +45,26 @@
 		{
 			"name": "Get Product By Id",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/product/53",
-					"protocol": "http",
+					"raw": "{{host}}/product/1",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8080",
 					"path": [
 						"product",
-						"53"
+						"1"
 					]
 				}
 			},
@@ -57,15 +73,23 @@
 		{
 			"name": "Get all products",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/product",
-					"protocol": "http",
+					"raw": "{{host}}/product",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8080",
 					"path": [
 						"product"
 					]
@@ -80,7 +104,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"productId\": 52,\r\n    \"productName\": \"iphone 14 pro max\",\r\n    \"price\": 20,\r\n    \"quantity\": 100\r\n}",
+					"raw": "{\r\n    \"productId\": 1,\r\n    \"productName\": \"iphone 14 pro max\",\r\n    \"price\": 20,\r\n    \"quantity\": 100\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -88,15 +112,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/product/50",
-					"protocol": "http",
+					"raw": "{{host}}/product/5",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8080",
 					"path": [
 						"product",
-						"50"
+						"5"
 					]
 				}
 			},
@@ -108,15 +130,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/product/10",
-					"protocol": "http",
+					"raw": "{{host}}/product/1",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8080",
 					"path": [
 						"product",
-						"10"
+						"1"
 					]
 				}
 			},
@@ -128,6 +148,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -146,12 +176,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/product/price-range?min=0&max=150",
-					"protocol": "http",
+					"raw": "{{host}}/product/price-range?min=0&max=150",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8080",
 					"path": [
 						"product",
 						"price-range"
@@ -176,22 +204,73 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/product/reduceQuantity/52?quantity=20",
-					"protocol": "http",
+					"raw": "{{host}}/product/reduceQuantity/1?quantity=10",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8080",
 					"path": [
 						"product",
 						"reduceQuantity",
-						"52"
+						"1"
 					],
 					"query": [
 						{
 							"key": "quantity",
-							"value": "20"
+							"value": "10"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Place Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\": 1,\r\n    \"totalAmount\": 200,\r\n    \"quantity\": 20,\r\n    \"paymentMode\": \"CASH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/order/placeOrder",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"order",
+						"placeOrder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Do Payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"orderId\": 1,\r\n    \"amount\": 200,\r\n    \"referenceNumber\": 1,\r\n    \"paymentMode\": \"CASH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/payment",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"payment"
 					]
 				}
 			},
