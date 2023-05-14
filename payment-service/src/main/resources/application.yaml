@@ -6,10 +6,30 @@ spring:
     password: jay123
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL57Dialect
     hibernate:
       ddl-auto: update
   application:
     name: payment-service
   config:
     import: "configserver:http://localhost:8088"
+  okta:
+    oauth2:
+      issuer: https://dev-34131083.okta.com/oauth2/default
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-34131083.okta.com/oauth2/default
+      client:
+        registration:
+          internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internalscope
+            client-id: 0oa9iu7v5tUPQDC7t5d7
+            client-secret: InIfiNZ7qGcgrdWpDiGwFkkTRGPQQdEkDeg6G3LK
+        provider:
+          okta:
+            issuer-uri: https://dev-34131083.okta.com/oauth2/default
+

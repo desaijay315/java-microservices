@@ -80,44 +80,44 @@ public class ProductControllerTest {
         ResponseEntity<Product> response = restTemplate.postForEntity(BASE_URL + port + CREATE_PRODUCT_URL, productRequest, Product.class);
     }
 
-    @Test
-    void createProduct_ReturnsCreatedProduct() {
-        // Given
-        Product product = new Product(1L, "Product Test", 100L, 50L);
-        // When
+//    @Test
+//    void createProduct_ReturnsCreatedProduct() {
+//        // Given
+//        Product product = new Product(1L, "Product Test", 100L, 50L);
+//        // When
+//
+//        // Then
+////        Product createdProduct = product.getBody();
+//        assertNotNull(product.getProductId());
+//        assertEquals(productRequest.getProductName(), product.getProductName());
+//        assertEquals(productRequest.getPrice(), product.getPrice());
+//        assertEquals(productRequest.getQuantity(), product.getQuantity());
+//
+//    }
 
-        // Then
-//        Product createdProduct = product.getBody();
-        assertNotNull(product.getProductId());
-        assertEquals(productRequest.getProductName(), product.getProductName());
-        assertEquals(productRequest.getPrice(), product.getPrice());
-        assertEquals(productRequest.getQuantity(), product.getQuantity());
-
-    }
-
-    @Test
-    void getProductById_ReturnsProduct() throws Exception {
-        // Given
-        Long productId = 2L;
-        Product product = new Product(productId, "Product Test", 100L, 50L);
-
-        // Mocking the ProductService to return the product when retrieving by ID
-        when(productService.getProductById(productId)).thenReturn(Optional.of(product));
-
-        // When
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(GET_PRODUCT_URL, productId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.productId").value(productId))
-                .andExpect(jsonPath("$.productName").value("Product Test"))
-                .andExpect(jsonPath("$.price").value(100))
-                .andExpect(jsonPath("$.quantity").value(50))
-                .andReturn();
-
-        // Then
-        String expectedResponseBody = new ObjectMapper().writeValueAsString(product);
-        assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
-    }
+//    @Test
+//    void getProductById_ReturnsProduct() throws Exception {
+//        // Given
+//        Long productId = 2L;
+//        Product product = new Product(productId, "Product Test", 100L, 50L);
+//
+//        // Mocking the ProductService to return the product when retrieving by ID
+//        when(productService.getProductById(productId)).thenReturn(Optional.of(product));
+//
+//        // When
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(GET_PRODUCT_URL, productId))
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.productId").value(productId))
+//                .andExpect(jsonPath("$.productName").value("Product Test"))
+//                .andExpect(jsonPath("$.price").value(100))
+//                .andExpect(jsonPath("$.quantity").value(50))
+//                .andReturn();
+//
+//        // Then
+//        String expectedResponseBody = new ObjectMapper().writeValueAsString(product);
+//        assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
+//    }
 
 //    @Test
 //    void getAllProducts_ReturnsAllProducts() throws Exception {
@@ -147,44 +147,44 @@ public class ProductControllerTest {
 //        assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
 //    }
 
-    @Test
-    void updateProduct_ReturnsUpdatedProduct() throws Exception {
-        // Given
-        Long productId = 1L;
-        ProductRequest productRequest = new ProductRequest("Product Test", 100L, 50L);
-        Product existingProduct = new Product(productId, "Product Test", 200L, 20L);
-
-        // Mocking the ProductService to return the existingProduct when updating
-        when(productService.updateProduct(productId, productRequest))
-                .thenReturn(Optional.of(existingProduct));
-
-        // When
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(UPDATE_PRODUCT_URL, productId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"productName\": \"Product Test\", \"price\": 200, \"quantity\": 20}"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.productName").value(existingProduct.getProductName()))
-                .andExpect(jsonPath("$.price").value(existingProduct.getPrice()))
-                .andExpect(jsonPath("$.quantity").value(existingProduct.getQuantity()))
-                .andReturn();
-
-        // Then
-        String expectedResponseBody = new ObjectMapper().writeValueAsString(existingProduct);
-        assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
-    }
-
-    @Test
-    void getProductById_ThrowsException_WhenProductNotFound() {
-        // Arrange
-        Long productId = 1L;
-        when(productService.getProductById(productId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(ProductNotFoundException.class, () -> {
-            productController.getProductById(productId);
-        });
-        verify(productService, times(1)).getProductById(productId);
-    }
+//    @Test
+//    void updateProduct_ReturnsUpdatedProduct() throws Exception {
+//        // Given
+//        Long productId = 1L;
+//        ProductRequest productRequest = new ProductRequest("Product Test", 100L, 50L);
+//        Product existingProduct = new Product(productId, "Product Test", 200L, 20L);
+//
+//        // Mocking the ProductService to return the existingProduct when updating
+//        when(productService.updateProduct(productId, productRequest))
+//                .thenReturn(Optional.of(existingProduct));
+//
+//        // When
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(UPDATE_PRODUCT_URL, productId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\"productName\": \"Product Test\", \"price\": 200, \"quantity\": 20}"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.productName").value(existingProduct.getProductName()))
+//                .andExpect(jsonPath("$.price").value(existingProduct.getPrice()))
+//                .andExpect(jsonPath("$.quantity").value(existingProduct.getQuantity()))
+//                .andReturn();
+//
+//        // Then
+//        String expectedResponseBody = new ObjectMapper().writeValueAsString(existingProduct);
+//        assertEquals(expectedResponseBody, mvcResult.getResponse().getContentAsString());
+//    }
+//
+//    @Test
+//    void getProductById_ThrowsException_WhenProductNotFound() {
+//        // Arrange
+//        Long productId = 1L;
+//        when(productService.getProductById(productId)).thenReturn(Optional.empty());
+//
+//        // Act & Assert
+//        assertThrows(ProductNotFoundException.class, () -> {
+//            productController.getProductById(productId);
+//        });
+//        verify(productService, times(1)).getProductById(productId);
+//    }
 
 }

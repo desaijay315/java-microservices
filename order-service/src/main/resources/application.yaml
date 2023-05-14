@@ -5,7 +5,7 @@ spring:
     password: jay123
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL57Dialect
     hibernate:
       ddl-auto: update
   application:
