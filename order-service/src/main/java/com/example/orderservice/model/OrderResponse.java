@@ -11,7 +11,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Builder
 public class OrderResponse {
-    private long orderId;
+    private Long orderId;
     private Instant orderDate;
     private String orderStatus;
     private long amount;
@@ -26,8 +26,8 @@ public class OrderResponse {
 
         private String productName;
         private long productId;
-        private long quantity;
-        private long price;
+        private Long quantity;
+        private Long price;
     }
 
     @Data

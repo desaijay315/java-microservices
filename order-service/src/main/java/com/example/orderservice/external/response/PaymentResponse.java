@@ -1,5 +1,5 @@
-package com.example.paymentservice.model;
-
+package com.example.orderservice.external.response;
+import com.example.orderservice.model.PaymentMode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.time.Instant;
 @Builder
 public class PaymentResponse {
 
-    private Long paymentId;
+    private long paymentId;
     private String status;
     private PaymentMode paymentMode;
     private long amount;
