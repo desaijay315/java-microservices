@@ -10,10 +10,13 @@ import com.example.paymentservice.service.PaymentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,20 +25,14 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class PaymentControllerTest {
 
+    @InjectMocks
     private PaymentController paymentController;
 
     @Mock
-    private PaymentDetailsRepository paymentDetailsRepository;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-        PaymentService paymentService = new PaymentServiceImpl(paymentDetailsRepository);
-        paymentController = new PaymentController(paymentService);
-    }
+    private PaymentService paymentService;
 
     @Test
     void testDoPayment() {
@@ -46,7 +43,7 @@ public class PaymentControllerTest {
                 .referenceNumber("ABCD1234")
                 .build();
 
-        when(paymentDetailsRepository.save(Mockito.any())).thenReturn(createPayment(paymentRequest));
+        when(paymentService.doPayment(Mockito.any(PaymentRequest.class))).thenReturn(1L);
 
         ResponseEntity<Long> responseEntity = paymentController.doPayment(paymentRequest);
 
@@ -57,13 +54,6 @@ public class PaymentControllerTest {
 
     @Test
     void testGetPaymentDetailsByOrderId() {
-        PaymentRequest paymentRequest = PaymentRequest.builder()
-                .orderId(1234L)
-                .amount(100L)
-                .paymentMode(PaymentMode.CASH)
-                .referenceNumber("ABCD1234")
-                .build();
-
         Instant paymentDate = Instant.parse("2023-05-06T10:45:59.632336Z");
 
         PaymentResponse expectedResponse = PaymentResponse.builder()
@@ -75,24 +65,13 @@ public class PaymentControllerTest {
                 .orderId(1234L)
                 .build();
 
-        when(paymentDetailsRepository.findByOrderId(Mockito.anyLong())).thenReturn(createPayment(paymentRequest));
+        when(paymentService.getPaymentDetailsByOrderId(Mockito.anyString())).thenReturn(expectedResponse);
 
-        PaymentResponse actualResponse = paymentController.getPaymentDetailsByOrderId("1234").getBody();
+        ResponseEntity<PaymentResponse> actualResponseEntity = paymentController.getPaymentDetailsByOrderId("1234");
 
+        PaymentResponse actualResponse = actualResponseEntity.getBody();
+
+        assertEquals(HttpStatus.OK, actualResponseEntity.getStatusCode());
         assertEquals(expectedResponse, actualResponse);
-    }
-
-    private Payment createPayment(PaymentRequest paymentRequest) {
-        Instant paymentDate = Instant.parse("2023-05-06T10:45:59.632336Z");
-
-        return Payment.builder()
-                .id(1L)
-                .orderId(paymentRequest.getOrderId())
-                .amount(paymentRequest.getAmount())
-                .paymentMode(paymentRequest.getPaymentMode().toString())
-                .referenceNumber(paymentRequest.getReferenceNumber())
-                .paymentDate(paymentDate)
-                .paymentStatus("SUCCESS")
-                .build();
     }
 }

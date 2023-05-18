@@ -6,6 +6,7 @@ import com.example.paymentservice.model.PaymentRequest;
 import com.example.paymentservice.model.PaymentResponse;
 import com.example.paymentservice.repository.PaymentDetailsRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -13,11 +14,8 @@ import java.time.Instant;
 @Service
 @Slf4j
 public class PaymentServiceImpl implements PaymentService{
-    private final PaymentDetailsRepository paymentDetailsRepository;
-
-    public PaymentServiceImpl(PaymentDetailsRepository paymentDetailsRepository) {
-        this.paymentDetailsRepository = paymentDetailsRepository;
-    }
+    @Autowired
+    private PaymentDetailsRepository paymentDetailsRepository;
 
     @Override
     public long doPayment(PaymentRequest paymentRequest) {
