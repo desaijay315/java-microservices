@@ -77,7 +77,7 @@ public class PaymentControllerTest {
 
         when(paymentDetailsRepository.findByOrderId(Mockito.anyLong())).thenReturn(createPayment(paymentRequest));
 
-        PaymentResponse actualResponse = paymentController.getPaymentDetailsByOrderId("1234");
+        PaymentResponse actualResponse = paymentController.getPaymentDetailsByOrderId("1234").getBody();
 
         assertEquals(expectedResponse, actualResponse);
     }

@@ -35,14 +35,22 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     public PaymentResponse getPaymentDetailsByOrderId(String orderId) {
-        Payment payment = paymentDetailsRepository.findByOrderId(Long.parseLong(orderId));
-        return PaymentResponse.builder()
-                .paymentId(payment.getId())
-                .status(payment.getPaymentStatus())
-                .paymentMode(PaymentMode.valueOf(payment.getPaymentMode()))
-                .amount(payment.getAmount())
-                .paymentDate(payment.getPaymentDate())
-                .orderId(payment.getOrderId())
+        log.info("Getting payment details for the Order Id: {}", orderId);
+        Payment paymentDetails = paymentDetailsRepository.findByOrderId(Long.valueOf(orderId));
+        log.info("Getting Payment paymentDetails: {}", paymentDetails);
+
+        PaymentResponse paymentResponse
+                = PaymentResponse.builder()
+                .paymentId(paymentDetails.getId())
+                .paymentMode(PaymentMode.valueOf(paymentDetails.getPaymentMode()))
+                .paymentDate(paymentDetails.getPaymentDate())
+                .orderId(paymentDetails.getOrderId())
+                .status(paymentDetails.getPaymentStatus())
+                .amount(paymentDetails.getAmount())
                 .build();
+        log.info("Getting Payment Response: {}", paymentResponse);
+
+        return paymentResponse;
+
     }
 }
